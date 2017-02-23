@@ -16,7 +16,11 @@ export default function enhanceScreen<T: *>(ScreenComponent: ReactClass<T>): Rea
       const nextOptions = {};
 
       for (const option in options) {
-        nextOptions[option] = { ...this._previousOptions[option], ...options[option] };
+        if (typeof options[option] === 'object' && typeof this._previousOptions[option] === 'object') {
+          nextOptions[option] = { ...this._previousOptions[option], ...options[option] };
+        } else {
+          nextOptions[option] = options[option];
+        }
       }
 
       EnhancedScreen.navigationOptions = nextOptions;
