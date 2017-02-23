@@ -9,20 +9,6 @@ export default function enhanceNavigator<T: *>(Navigator: ReactClass<T>): ReactC
 
     static displayName = `enhancedNavigator(${Navigator.displayName || Navigator.name})`;
 
-    static childContextTypes = {
-      onNavigationOptionsChange: PropTypes.func,
-    }
-
-    getChildContext() {
-      return {
-        onNavigationOptionsChange: this._handleNavigationOptionsChange,
-      };
-    }
-
-    _handleNavigationOptionsChange = () => {
-      // TODO
-    };
-
     render() {
       return <Navigator {...this.props} />;
     }
