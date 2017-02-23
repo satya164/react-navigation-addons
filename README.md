@@ -15,9 +15,9 @@ export default Stacks = enhance(StackNavigator)({
 });
 ```
 
-### Customize stack header buttons
+### Customize navigation options
 
-Header buttons are tightly coupled to your component. What if you could configure them inside render instead of in the static `navigationOptions`?
+Navigation options are usually tightly coupled to your component. What if you could configure them inside render instead of in the static property?
 
 ```js
 import React, { Component } from 'react';
