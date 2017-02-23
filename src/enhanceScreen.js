@@ -9,27 +9,24 @@ export default function enhanceScreen<T: *>(ScreenComponent: ReactClass<T>): Rea
     static displayName = `enhancedScreen(${ScreenComponent.displayName || ScreenComponent.name})`;
 
     static contextTypes = {
-      updateNavigationComponents: PropTypes.func,
-    }
-
-    static childContextTypes = {
       onNavigationOptionsChange: PropTypes.func,
     }
 
-    getChildContext() {
-      return {
-        onNavigationOptionsChange: this._handleNavigationOptionsChange,
-      };
-    }
+    _previousOptions = ScreenComponent.navigationOptions;
 
-    _handleNavigationOptionsChange = options => {
-      const nextOptions = { ...ScreenComponent.navigationOptions, ...options };
+    _setOptions = options => {
+      const nextOptions = { ...this._previousOptions, ...options };
       EnhancedScreen.navigationOptions = nextOptions;
-      this.context.updateNavigationComponents(nextOptions);
+      this.context.onNavigationOptionsChange(nextOptions);
+      this._previousOptions = nextOptions;
     };
 
     render() {
-      return <ScreenComponent {...this.props} />;
+      const navigation = {
+        ...this.props.navigation,
+        setOptions: this._setOptions,
+      };
+      return <ScreenComponent {...this.props} navigation={navigation} />;
     }
   }
 

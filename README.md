@@ -24,22 +24,21 @@ import React, { Component } from 'react';
 import { NavigationOptions } from 'react-navigation-addons';
 
 export default class HomeScreen extends Component {
+  componentWillMount() {
+    this.props.navigation.setOptions({
+      header: {
+        title: this.props.userId,
+        left: (
+          <TouchableOpacity onPress={this._handleSave}>
+            <Text>Save</Text>
+          </TouchableOpacity>
+        )
+      };
+    });
+  }
+
   render() {
-    return (
-      <View>
-        <NavigationOptions
-          header={{
-            title: this.props.userId,
-            left: (
-              <TouchableOpacity onPress={this._handleSave}>
-                <Text>Save</Text>
-              </TouchableOpacity>
-            )
-          }}
-        />
-        <Posts />
-      </View>
-    );
+    ...
   }
 }
 ```

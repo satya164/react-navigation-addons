@@ -3,17 +3,23 @@
 import React, { PureComponent } from 'react';
 import { Text, View } from 'react-native';
 import { StackNavigator, CardStack } from 'react-navigation';
-import { enhance, NavigationOptions } from 'react-navigation-addons';
+import { enhance } from 'react-navigation-addons';
 
 class HomeScreen extends PureComponent {
   state = {
     title: 'Hello world',
   };
 
+  componentWillMount() {
+    this.props.navigation.setOptions({
+      title: 'Hello world',
+    });
+  }
+
   componentDidMount() {
     let i = 0;
     setInterval(() => {
-      this.setState({
+      this.props.navigation.setOptions({
         title: `Hello world ${i}`,
       });
       i++;
@@ -23,11 +29,6 @@ class HomeScreen extends PureComponent {
   render() {
     return (
       <View>
-        <NavigationOptions
-          header={{
-            title: this.state.title,
-          }}
-        />
         <Text>Hello</Text>
       </View>
     );
