@@ -4,12 +4,21 @@ import React, { PureComponent } from 'react';
 
 export default function enhanceScreen<T: *>(ScreenComponent: ReactClass<T>): ReactClass<T> {
   class EnhancedScreen extends PureComponent<void, T, void> {
-    static navigationOptions = ScreenComponent.navigationOptions;
-
     static displayName = `enhancedScreen(${ScreenComponent.displayName || ScreenComponent.name})`;
 
-    _previousOptions = ScreenComponent.navigationOptions || {};
+    static navigationOptions = ScreenComponent.navigationOptions;
 
+    static childContextTypes = {
+      navigation: React.PropTypes.object.isRequired,
+    };
+
+    getChildContext() {
+      return {
+        navigation: this._navigation,
+      };
+    }
+
+    _previousOptions = ScreenComponent.navigationOptions || {};
     _updateCount = 0;
 
     _setOptions = (options) => {
@@ -31,12 +40,15 @@ export default function enhanceScreen<T: *>(ScreenComponent: ReactClass<T>): Rea
       this._updateCount++;
     };
 
-    render() {
-      const navigation = {
+    get _navigation() {
+      return {
         ...this.props.navigation,
         setOptions: this._setOptions,
       };
-      return <ScreenComponent {...this.props} navigation={navigation} />;
+    }
+
+    render() {
+      return <ScreenComponent {...this.props} navigation={this._navigation} />;
     }
   }
 
