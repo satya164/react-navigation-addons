@@ -27,7 +27,7 @@ class HomeScreen extends PureComponent {
         },
       });
       i++;
-    }, 3000);
+    }, 1000);
   }
 
   render() {

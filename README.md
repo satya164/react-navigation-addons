@@ -1,7 +1,9 @@
 React Navigation Add-ons
 ========================
 
-This library contains useful addons for React Navigation which lets you write declarative and simpler code.
+**NOTE: This is an experiment. If you want to use this in your app, please copy the files instead of using the repo directly. The API can change anytime or the repo might be deleted.**
+
+Useful addons for React Navigation which lets you write declarative and simpler code.
 
 ## Usage:
 
@@ -37,13 +39,25 @@ export default class HomeScreen extends Component {
     });
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.props.navigation.setOptions({
+      header: {
+        title: nextProps.userId,
+      }
+    });
+  }
+
+  _handleSave = () => {
+    ...
+  }
+
   render() {
     ...
   }
 }
 ```
 
-## `withNavigationFocus` HOC
+### `withNavigationFocus` HOC (Not implemented)
 
 This allows you to wrap any child component of a screen and receive an `isFocused` prop which tell you if the parent screen is in focus.
 

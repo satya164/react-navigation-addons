@@ -1,6 +1,6 @@
 /* @flow */
 
-import React, { PureComponent, PropTypes } from 'react';
+import React, { PureComponent } from 'react';
 
 export default function enhanceNavigator<T: *>(Navigator: ReactClass<T>): ReactClass<T> {
   class EnhancedNavigator extends PureComponent<void, T, void> {
