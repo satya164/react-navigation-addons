@@ -20,13 +20,9 @@ export default function enhanceNavigator<T: *>(Navigator: ReactClass<T>): ReactC
       };
     }
 
-    _listeners = [];
-
-    _updateNavigationComponents = (options) => {
-      this._listeners.forEach(cb => cb(options));
+    _updateNavigationComponents = () => {
+      // TODO
     };
-
-    _handleNavigationUpdates = cb => this._listeners.push(cb);
 
     render() {
       return <Navigator {...this.props} />;

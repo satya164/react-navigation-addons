@@ -17,7 +17,7 @@ export default Stacks = enhance(StackNavigator)({
 
 ### Customize navigation options
 
-Navigation options are usually tightly coupled to your component. What if you could configure them inside render instead of in the static property?
+Navigation options are usually tightly coupled to your component. What if you could configure them inside your component instead of in the static property?
 
 ```js
 import React, { Component } from 'react';

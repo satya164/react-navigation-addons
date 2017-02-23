@@ -2,7 +2,7 @@
 
 import React, { PureComponent } from 'react';
 import { Text, View } from 'react-native';
-import { StackNavigator } from 'react-navigation';
+import { StackNavigator, CardStack } from 'react-navigation';
 import { enhance, NavigationOptions } from 'react-navigation-addons';
 
 class HomeScreen extends PureComponent {
@@ -36,6 +36,8 @@ class HomeScreen extends PureComponent {
 
 const Stacks = enhance(StackNavigator)({
   Home: { screen: HomeScreen },
+}, {
+  headerComponent: CardStack.Header,
 });
 
 export default class StackNavigatorExample extends PureComponent {
