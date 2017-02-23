@@ -4,7 +4,7 @@ import React, { PureComponent, PropTypes } from 'react';
 
 export default function enhanceScreen<T: *>(ScreenComponent: ReactClass<T>): ReactClass<T> {
   class EnhancedScreen extends PureComponent<void, T, void> {
-    static navigationOptions = {};
+    static navigationOptions = ScreenComponent.navigationOptions;
 
     static displayName = `enhancedScreen(${ScreenComponent.displayName || ScreenComponent.name})`;
 
@@ -23,8 +23,9 @@ export default function enhanceScreen<T: *>(ScreenComponent: ReactClass<T>): Rea
     }
 
     _handleNavigationOptionsChange = options => {
-      EnhancedScreen.navigationOptions = options;
-      this.context.updateNavigationComponents(options);
+      const nextOptions = { ...ScreenComponent.navigationOptions, ...options };
+      EnhancedScreen.navigationOptions = nextOptions;
+      this.context.updateNavigationComponents(nextOptions);
     };
 
     render() {
