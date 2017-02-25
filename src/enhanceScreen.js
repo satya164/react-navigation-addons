@@ -1,6 +1,7 @@
 /* @flow */
 
-import React, { PureComponent, PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
+import ReactComponentWithPureRenderMixin from 'react/lib/ReactComponentWithPureRenderMixin';
 import type {
   NavigationState,
 } from 'react-navigation/src/TypeDefinition';
@@ -14,8 +15,10 @@ type Context = {
   removeNavigationStateChangeListener: (NavigationState => void) => void;
 }
 
+const COUNT_PARAM = '__react_navigation_addons_update_count';
+
 export default function enhanceScreen<T: *>(ScreenComponent: ReactClass<T>): ReactClass<T> {
-  return class EnhancedScreen extends PureComponent<void, T, void> {
+  return class EnhancedScreen extends Component<void, T, void> {
     static displayName = `enhancedScreen(${ScreenComponent.displayName || ScreenComponent.name})`;
 
     static navigationOptions = ScreenComponent.navigationOptions;
@@ -38,6 +41,28 @@ export default function enhanceScreen<T: *>(ScreenComponent: ReactClass<T>): Rea
 
     componentDidMount() {
       this.context.addNavigationStateChangeListener(this._handleNavigationStateChange);
+    }
+
+    shouldComponentUpdate(nextProps) {
+      const { state } = this.props.navigation;
+      const { state: nextState } = nextProps.navigation;
+
+      // This is a result of a previous `setOptions` call, prevent extra render
+      if (state.params) {
+        if (nextState.params && nextState.params[COUNT_PARAM] === state.params[COUNT_PARAM] + 1) {
+          return false;
+        }
+      } else {
+        if (nextState.params[COUNT_PARAM] === 0) {
+          return false;
+        }
+      }
+
+      return ReactComponentWithPureRenderMixin.shouldComponentUpdate.call(
+        this,
+        nextProps,
+        nextState,
+      );
     }
 
     componentWillUnmount() {
@@ -64,7 +89,7 @@ export default function enhanceScreen<T: *>(ScreenComponent: ReactClass<T>): Rea
 
       EnhancedScreen.navigationOptions = nextOptions;
       this.props.navigation.setParams({
-        __react_navigation_addons_update_count: this._updateCount,
+        [COUNT_PARAM]: this._updateCount,
       });
       this._previousOptions = nextOptions;
       this._updateCount++;
