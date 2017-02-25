@@ -76,11 +76,15 @@ export default function enhanceScreen<T: *>(ScreenComponent: ReactClass<T>): Rea
     _listeners: { [key: ListenerName]: Array<Listener> };
     _focused: boolean = false;
 
+    _isPlainObject = o => {
+      return typeof o === 'object' && (o.constructor === Object || typeof o.constructor === 'undefined');
+    };
+
     _setOptions = (options) => {
       const nextOptions = {};
 
       for (const option in options) {
-        if (typeof options[option] === 'object' && typeof this._previousOptions[option] === 'object') {
+        if (this._isPlainObject(options[option]) && this._isPlainObject(this._previousOptions[option])) {
           nextOptions[option] = { ...this._previousOptions[option], ...options[option] };
         } else {
           nextOptions[option] = options[option];
