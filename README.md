@@ -5,7 +5,7 @@ React Navigation Add-ons
 
 Useful addons for React Navigation.
 
-## Usage:
+## Usage
 
 You'd need to wrap the navigators with our `enhance` function. For example, to wrap `Stacknavigator`:
 
@@ -61,8 +61,6 @@ class HomeScreen extends Component {
   }
 }
 ```
-
-You can still use the static `navigationOptions` property and use `navigation.setOptions` only to update them if you want.
 
 ### `navigation.addListener`
 
