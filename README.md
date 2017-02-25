@@ -23,13 +23,12 @@ export default Stacks = enhance(StackNavigator)({
 
 ### `navigation.setOptions`
 
-Navigation options are usually tightly coupled to your component. This allows you to configure and update the navigation options from your component rather than using the static property and params, which means you can use your component's props and state, as well as any instance methods.
+Navigation options are usually tightly coupled to your component. This method allows you to configure and update the navigation options from your component rather than using the static property and params, which means you can use your component's props and state, as well as any instance methods.
+
+Example:
 
 ```js
-import React, { Component } from 'react';
-import { NavigationOptions } from 'react-navigation-addons';
-
-export default class HomeScreen extends Component {
+class HomeScreen extends Component {
   componentWillMount() {
     this.props.navigation.setOptions({
       header: {
@@ -55,7 +54,7 @@ export default class HomeScreen extends Component {
 
   _handleSave = () => {
     ...
-  }
+  };
 
   render() {
     ...
@@ -65,21 +64,55 @@ export default class HomeScreen extends Component {
 
 You can still use the static `navigationOptions` property and use `navigation.setOptions` only to update them if you want.
 
-### `withNavigationFocus` HOC (Not implemented)
+### `navigation.addListener`
 
-This allows you to wrap any child component of a screen and receive an `isFocused` prop which tell you if the parent screen is in focus.
+Sometimes you want to do something when the screen comes into focus, for example fetch some data, and cancel the operation when screen goes out of focus. This method allows you to listen to events like `focus` and `blur`.
+
+Example:
 
 ```js
-import React, { Component } from 'react';
-import { withNavigationFocus } from 'react-navigation-addons';
+class HomeScreen extends Component {
+  componentDidMount() {
+    this.props.navigation.addListener('focus', this._fetchData);
+    this.props.navigation.addListener('blur', this._cancelFetch);
+  }
 
-class Post extends Component {
+  _fetchData = () => {
+    ...
+  };
+
+  _cancelFetch = () => {
+    ...
+  };
+
   render() {
-    return (
-      <VideoPlayer isPlaying={this.props.isFocused} />
-    );
+    ...
   }
 }
+```
 
-export default withNavigationFocus(Post);
+You don't need to cleanup the events manually. Listeners are automatically cleaned up when the screen unmounts.
+
+### `navigation.isFocused`
+
+When you just want to check whether the screen is focused, you can use this method to check whether the screen is focused without having to add the listeners and maintain a local instance property.
+
+Example:
+
+```js
+class HomeScreen extends Component {
+  componentDidUpdate(prevProps) {
+    if (prevProps.online.count !== this.props.onliine.count && this.props.navigation.isFocused()) {
+      this._showNotification();
+    }
+  }
+
+  _showNotification = () => {
+    ...
+  };
+
+  render() {
+    ...
+  }
+}
 ```

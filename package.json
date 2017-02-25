@@ -5,6 +5,10 @@
   "main": "src/index.js",
   "author": "Satyajit Sahoo <satyajit.happy@gmail.com>",
   "license": "MIT",
+  "scripts": {
+    "flow": "flow",
+    "lint": "eslint ."
+  },
   "devDependencies": {
     "babel-eslint": "^7.1.1",
     "eslint": "^3.16.1",
