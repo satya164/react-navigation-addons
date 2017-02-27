@@ -53,7 +53,7 @@ export default function enhanceScreen<T: *>(ScreenComponent: ReactClass<T>): Rea
           return false;
         }
       } else {
-        if (nextState.params[COUNT_PARAM] === 0) {
+        if (nextState.params && nextState.params[COUNT_PARAM] === 0) {
           return false;
         }
       }
