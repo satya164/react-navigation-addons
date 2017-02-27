@@ -116,14 +116,16 @@ export default function enhanceScreen<T: *>(ScreenComponent: ReactClass<T>): Rea
     };
 
     _handleNavigationStateChange = state => {
-      const focused = state.routes[state.index] === this.props.navigation.state;
+      if (this._listeners != undefined) {
+        const focused = state.routes[state.index] === this.props.navigation.state;
 
-      if (this._listeners.focus && focused) {
-        this._listeners.focus.forEach(cb => cb());
-      }
+        if (this._listeners.focus && focused) {
+          this._listeners.focus.forEach(cb => cb());
+        }
 
-      if (this._listeners.blur && !focused) {
-        this._listeners.blur.forEach(cb => cb());
+        if (this._listeners.blur && !focused) {
+          this._listeners.blur.forEach(cb => cb());
+        }
       }
     };
 
