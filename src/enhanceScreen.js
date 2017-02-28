@@ -6,7 +6,7 @@ import type {
   NavigationState,
 } from 'react-navigation/src/TypeDefinition';
 
-type ListenerName = 'focus' | 'blur'
+type ListenerName = 'focus' | 'blur' | 'change'
 type Listener = () => void
 
 type Context = {
@@ -117,6 +117,10 @@ export default function enhanceScreen<T: *>(ScreenComponent: ReactClass<T>): Rea
 
     _handleNavigationStateChange = state => {
       const focused = state.routes[state.index] === this.props.navigation.state;
+
+      if (this._listeners.change) {
+        this._listeners.change.forEach(cb => cb(state));
+      }
 
       if (this._listeners.focus && focused) {
         this._listeners.focus.forEach(cb => cb());

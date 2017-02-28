@@ -25,7 +25,7 @@ export default Stacks = enhance(StackNavigator)({
 
 Navigation options are usually tightly coupled to your component. This method allows you to configure and update the navigation options from your component rather than using the static property and params, which means you can use your component's props and state, as well as any instance methods.
 
-Example:
+**Example:**
 
 ```js
 class HomeScreen extends Component {
@@ -66,13 +66,18 @@ class HomeScreen extends Component {
 
 Sometimes you want to do something when the screen comes into focus, for example fetch some data, and cancel the operation when screen goes out of focus. This method allows you to listen to events like `focus` and `blur`.
 
-Example:
+**Example:**
 
 ```js
 class HomeScreen extends Component {
   componentDidMount() {
     this.props.navigation.addListener('focus', this._fetchData);
     this.props.navigation.addListener('blur', this._cancelFetch);
+  }
+
+  componentWillUnmount() {
+    this.props.navigation.removeListener('focus', this._fetchData);
+    this.props.navigation.removeListener('blur', this._cancelFetch);
   }
 
   _fetchData = () => {
@@ -89,13 +94,35 @@ class HomeScreen extends Component {
 }
 ```
 
-You don't need to cleanup the events manually. Listeners are automatically cleaned up when the screen unmounts.
+In addition to `focus` and `blur`, this also allows you to subscribe to a change event which fires whenever the navigation state changes.
+
+**Example:**
+
+```js
+class HomeScreen extends Component {
+  componentDidMount() {
+    this.props.navigation.addListener('change', this._handleStateChange);
+  }
+
+  componentWillUnmount() {
+    this.props.navigation.removeListener('change', this._handleStateChange);
+  }
+
+  _handleStateChange = () => {
+    ...
+  };
+
+  render() {
+    ...
+  }
+}
+```
 
 ### `navigation.isFocused`
 
 When you just want to check whether the screen is focused, you can use this method to check whether the screen is focused without having to add the listeners and maintain a local instance property.
 
-Example:
+**Example:**
 
 ```js
 class HomeScreen extends Component {
