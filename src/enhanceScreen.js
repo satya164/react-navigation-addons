@@ -131,18 +131,12 @@ export default function enhanceScreen<T: *>(ScreenComponent: ReactClass<T>): Rea
       }
     };
 
-    _isFocused = () => {
-      const state = this.context.getNavigationState();
-      return state ? state.routes[state.index] === this.props.navigation.state : false;
-    };
-
     get _navigation() {
       return {
         ...this.props.navigation,
         setOptions: this._setOptions,
         addListener: this._addListener,
         removeListener: this._removeListener,
-        isFocused: this._isFocused,
       };
     }
 

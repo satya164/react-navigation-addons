@@ -117,27 +117,3 @@ class HomeScreen extends Component {
   }
 }
 ```
-
-### `navigation.isFocused`
-
-When you just want to check whether the screen is focused, you can use this method to check whether the screen is focused without having to add the listeners and maintain a local instance property.
-
-**Example:**
-
-```js
-class HomeScreen extends Component {
-  componentDidUpdate(prevProps) {
-    if (prevProps.online.count !== this.props.onliine.count && this.props.navigation.isFocused()) {
-      this._showNotification();
-    }
-  }
-
-  _showNotification = () => {
-    ...
-  };
-
-  render() {
-    ...
-  }
-}
-```
