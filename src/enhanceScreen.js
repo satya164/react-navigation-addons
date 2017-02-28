@@ -73,7 +73,7 @@ export default function enhanceScreen<T: *>(ScreenComponent: ReactClass<T>): Rea
 
     _previousOptions = ScreenComponent.navigationOptions || {};
     _updateCount = 0;
-    _listeners: { [key: ListenerName]: Array<Listener> };
+    _listeners: { [key: ListenerName]: Array<Listener> } = {};
     _focused: boolean = false;
 
     _isPlainObject = o => {
@@ -108,16 +108,14 @@ export default function enhanceScreen<T: *>(ScreenComponent: ReactClass<T>): Rea
     };
 
     _removeListener = (name: ListenerName, callback: Listener) => {
-      if (this._listeners && this._listeners[name]) {
-        this._listeners[name] = this._listeners[name].filter(cb => cb !== callback);
-      }
-    };
-
-    _handleNavigationStateChange = state => {
-      if (!this._listeners) {
+      if (!this._listeners[name]) {
         return;
       }
 
+      this._listeners[name] = this._listeners[name].filter(cb => cb !== callback);
+    };
+
+    _handleNavigationStateChange = state => {
       const focused = state.routes[state.index] === this.props.navigation.state;
 
       if (this._listeners.focus && focused) {
