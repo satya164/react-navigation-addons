@@ -53,7 +53,7 @@ export default function enhanceScreen<T: *>(ScreenComponent: ReactClass<T>): Rea
           return false;
         }
       } else {
-        if (nextState.params[COUNT_PARAM] === 0) {
+        if (nextState.params && nextState.params[COUNT_PARAM] === 0) {
           return false;
         }
       }
@@ -108,14 +108,16 @@ export default function enhanceScreen<T: *>(ScreenComponent: ReactClass<T>): Rea
     };
 
     _removeListener = (name: ListenerName, callback: Listener) => {
-      if (!this._listeners[name]) {
-        return;
+      if (this._listeners && this._listeners[name]) {
+        this._listeners[name] = this._listeners[name].filter(cb => cb !== callback);
       }
-
-      this._listeners[name] = this._listeners[name].filter(cb => cb !== callback);
     };
 
     _handleNavigationStateChange = state => {
+      if (!this._listeners) {
+        return;
+      }
+
       const focused = state.routes[state.index] === this.props.navigation.state;
 
       if (this._listeners.focus && focused) {
