@@ -62,6 +62,8 @@ class HomeScreen extends Component {
 }
 ```
 
+`setOptions` does a 2 level merge for plain object options. For example, the `header` options get merged with previous `header` options. So you don't have to pass the full header object again.
+
 ### `navigation.addListener`
 
 Sometimes you want to do something when the screen comes into focus, for example fetch some data, and cancel the operation when screen goes out of focus. This method allows you to listen to events like `focus` and `blur`.
@@ -94,7 +96,7 @@ class HomeScreen extends Component {
 }
 ```
 
-In addition to `focus` and `blur`, this also allows you to subscribe to a change event which fires whenever the navigation state changes.
+In addition to `focus` and `blur`, this also allows you to listen to a `change` event which fires whenever the navigation state changes. The listener receives the state as the argument.
 
 **Example:**
 
@@ -108,7 +110,7 @@ class HomeScreen extends Component {
     this.props.navigation.removeListener('change', this._handleStateChange);
   }
 
-  _handleStateChange = () => {
+  _handleStateChange = state => {
     ...
   };
 
