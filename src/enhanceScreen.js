@@ -108,24 +108,24 @@ export default function enhanceScreen<T: *>(ScreenComponent: ReactClass<T>): Rea
     };
 
     _removeListener = (name: ListenerName, callback: Listener) => {
-      if (!this._listeners[name]) {
-        return;
+      if (this._listeners && this._listeners[name]) {
+        this._listeners[name] = this._listeners[name].filter(cb => cb !== callback);
       }
-
-      this._listeners[name] = this._listeners[name].filter(cb => cb !== callback);
     };
 
     _handleNavigationStateChange = state => {
-      if (this._listeners != undefined) {
-        const focused = state.routes[state.index] === this.props.navigation.state;
+      if (!this._listeners) {
+        return;
+      }
 
-        if (this._listeners.focus && focused) {
-          this._listeners.focus.forEach(cb => cb());
-        }
+      const focused = state.routes[state.index] === this.props.navigation.state;
 
-        if (this._listeners.blur && !focused) {
-          this._listeners.blur.forEach(cb => cb());
-        }
+      if (this._listeners.focus && focused) {
+        this._listeners.focus.forEach(cb => cb());
+      }
+
+      if (this._listeners.blur && !focused) {
+        this._listeners.blur.forEach(cb => cb());
       }
     };
 
