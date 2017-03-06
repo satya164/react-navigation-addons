@@ -39,6 +39,10 @@ export default function enhanceScreen<T: *>(ScreenComponent: ReactClass<T>): Rea
       };
     }
 
+    componentWillMount() {
+      this.props.navigation.setParams({ [COUNT_PARAM]: this._updateCount });
+    }
+
     componentDidMount() {
       this.context.addNavigationStateChangeListener(this._handleNavigationStateChange);
     }
@@ -50,10 +54,6 @@ export default function enhanceScreen<T: *>(ScreenComponent: ReactClass<T>): Rea
       // This is a result of a previous `setOptions` call, prevent extra render
       if (state.params) {
         if (nextState.params && nextState.params[COUNT_PARAM] === state.params[COUNT_PARAM] + 1) {
-          return false;
-        }
-      } else {
-        if (nextState.params && nextState.params[COUNT_PARAM] === 0) {
           return false;
         }
       }
@@ -90,9 +90,7 @@ export default function enhanceScreen<T: *>(ScreenComponent: ReactClass<T>): Rea
       }
 
       EnhancedScreen.navigationOptions = nextOptions;
-      this.props.navigation.setParams({
-        [COUNT_PARAM]: this._updateCount,
-      });
+      this.props.navigation.setParams({ [COUNT_PARAM]: this._updateCount });
       this._previousOptions = nextOptions;
       this._updateCount++;
     };
