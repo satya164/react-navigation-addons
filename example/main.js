@@ -12,20 +12,16 @@ class HomeScreen extends PureComponent {
   };
 
   componentWillMount() {
-    this.props.navigation.setOptions({
-      header: {
-        title: 'Hello world',
-      },
+    this.props.navigation.setOptions('header', {
+      title: 'Hello world',
     });
   }
 
   componentDidMount() {
     let i = 0;
     setInterval(() => {
-      this.props.navigation.setOptions({
-        header: {
-          title: `Hello world ${i}`,
-        },
+      this.props.navigation.setOptions('header', {
+        title: `Hello world ${i}`,
       });
       i++;
     }, 1000);

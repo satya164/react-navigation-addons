@@ -80,15 +80,13 @@ export default function enhanceScreen<T: *>(ScreenComponent: ReactClass<T>): Rea
       return typeof o === 'object' && (o.constructor === Object || typeof o.constructor === 'undefined');
     };
 
-    _setOptions = (options) => {
-      const nextOptions = {};
+    _setOptions = (name, options) => {
+      const nextOptions = { ...this._previousOptions };
 
-      for (const option in options) {
-        if (this._isPlainObject(options[option]) && this._isPlainObject(this._previousOptions[option])) {
-          nextOptions[option] = { ...this._previousOptions[option], ...options[option] };
-        } else {
-          nextOptions[option] = options[option];
-        }
+      if (this._isPlainObject(options) && this._isPlainObject(this._previousOptions[name])) {
+        nextOptions[name] = { ...this._previousOptions[name], ...options };
+      } else {
+        nextOptions[name] = options;
       }
 
       EnhancedScreen.navigationOptions = nextOptions;

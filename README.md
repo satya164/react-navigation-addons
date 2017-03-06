@@ -30,25 +30,21 @@ Navigation options are usually tightly coupled to your component. This method al
 ```js
 class HomeScreen extends Component {
   componentWillMount() {
-    this.props.navigation.setOptions({
-      header: {
-        title: this.props.navigation.state.params.user,
-        tintColor: this.props.theme.tintColor,
-        left: (
-          <TouchableOpacity onPress={this._handleSave}>
-            <Text>Save</Text>
-          </TouchableOpacity>
-        )
-      };
+    this.props.navigation.setOptions('header', {
+      title: this.props.navigation.state.params.user,
+      tintColor: this.props.theme.tintColor,
+      left: (
+        <TouchableOpacity onPress={this._handleSave}>
+          <Text>Save</Text>
+        </TouchableOpacity>
+      )
     });
   }
 
   componentWillReceiveProps(nextProps) {
-    this.props.navigation.setOptions({
-      header: {
-        title: nextProps.navigation.state.params.user,
-        tintColor: nextProps.theme.tintColor,
-      }
+    this.props.navigation.setOptions('header', {
+      title: nextProps.navigation.state.params.user,
+      tintColor: nextProps.theme.tintColor,
     });
   }
 
@@ -62,7 +58,7 @@ class HomeScreen extends Component {
 }
 ```
 
-`setOptions` does a 2 level merge for plain object options. For example, the `header` options get merged with previous `header` options. So you don't have to pass the full header object again.
+Calling `setOptions` with an plain object does a merge with previous options. For example, the options for `header` get merged with previous options for `header`. So you don't have to pass the full header object again.
 
 ### `navigation.addListener`
 
