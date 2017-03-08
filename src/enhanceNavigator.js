@@ -15,23 +15,22 @@ export default function enhanceNavigator<T: *>(Navigator: ReactClass<T>): ReactC
     static displayName = `enhancedNavigator(${Navigator.displayName || Navigator.name})`;
 
     static childContextTypes = {
-      getNavigationState: PropTypes.func,
+      getParentNavigation: PropTypes.func,
       addNavigationStateChangeListener: PropTypes.func,
       removeNavigationStateChangeListener: PropTypes.func,
     };
 
     getChildContext() {
       return {
-        getNavigationState: PropTypes.func,
+        getParentNavigation: this._getParentNavigation,
         addNavigationStateChangeListener: this._addNavigationStateChangeListener,
         removeNavigationStateChangeListener: this._removeNavigationStateChangeListener,
       };
     }
 
-    _navigationState = null;
     _listeners: Array<NavigationStateListener> = [];
 
-    _getNavigationState = () => this._navigationState;
+    _getParentNavigation = () => this.props.navigation;
 
     _addNavigationStateChangeListener = (cb: NavigationStateListener) => {
       this._listeners.push(cb);
@@ -42,7 +41,6 @@ export default function enhanceNavigator<T: *>(Navigator: ReactClass<T>): ReactC
     };
 
     _handleNavigationStateChange = (prevState, currState) => {
-      this._navigationState = currState;
       this._listeners.forEach(cb => cb(currState));
 
       if (typeof this.props.onNavigationStateChange !== 'undefined') {

@@ -4,13 +4,15 @@ import React, { Component, PropTypes } from 'react';
 import ReactComponentWithPureRenderMixin from 'react/lib/ReactComponentWithPureRenderMixin';
 import type {
   NavigationState,
+  NavigationAction,
+  NavigationScreenProp,
 } from 'react-navigation/src/TypeDefinition';
 
 type ListenerName = 'focus' | 'blur' | 'change'
 type Listener = () => void
 
 type Context = {
-  getNavigationState: () => NavigationState;
+  getParentNavigation: () => NavigationScreenProp<NavigationState, NavigationAction>;
   addNavigationStateChangeListener: (NavigationState => void) => void;
   removeNavigationStateChangeListener: (NavigationState => void) => void;
 }
@@ -24,7 +26,7 @@ export default function enhanceScreen<T: *>(ScreenComponent: ReactClass<T>): Rea
     static navigationOptions = ScreenComponent.navigationOptions;
 
     static contextTypes = {
-      getNavigationState: PropTypes.func,
+      getParentNavigation: PropTypes.func,
       addNavigationStateChangeListener: PropTypes.func,
       removeNavigationStateChangeListener: PropTypes.func,
     };
@@ -95,6 +97,8 @@ export default function enhanceScreen<T: *>(ScreenComponent: ReactClass<T>): Rea
       this._updateCount++;
     };
 
+    _getParent = () => this.context.getParentNavigation();
+
     _addListener = (name: ListenerName, callback: Listener) => {
       if (!this._listeners[name]) {
         this._listeners[name] = [];
@@ -131,6 +135,7 @@ export default function enhanceScreen<T: *>(ScreenComponent: ReactClass<T>): Rea
       return {
         ...this.props.navigation,
         setOptions: this._setOptions,
+        getParent: this._getParent,
         addListener: this._addListener,
         removeListener: this._removeListener,
       };

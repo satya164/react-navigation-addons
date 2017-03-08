@@ -115,3 +115,27 @@ class HomeScreen extends Component {
   }
 }
 ```
+
+### `navigation.getParent`
+
+Many times you need a reference to the parent navigation prop if you want to dispatch an action on the parent navigator. This method returns a reference to the navigation prop of the parent navigator.
+
+**Example:**
+
+```js
+class SettingsScreen extends Component {
+  _popAllTabs = () => {
+    const parent = this.props.navigation.getParent();
+
+    if (parent) {
+      parent.goBack(null);
+    }
+  };
+
+  render() {
+    ...
+  }
+}
+```
+
+If there's no parent navigator, this method will return `undefined`.
