@@ -1,7 +1,7 @@
 /* @flow */
 
 import React, { Component, PropTypes } from 'react';
-import ReactComponentWithPureRenderMixin from 'react/lib/ReactComponentWithPureRenderMixin';
+import shallowCompare from 'react-addons-shallow-compare';
 import type {
   NavigationState,
   NavigationAction,
@@ -60,11 +60,7 @@ export default function enhanceScreen<T: *>(ScreenComponent: ReactClass<T>): Rea
         }
       }
 
-      return ReactComponentWithPureRenderMixin.shouldComponentUpdate.call(
-        this,
-        nextProps,
-        nextState,
-      );
+      return shallowCompare(this, nextProps, nextState);
     }
 
     componentWillUnmount() {

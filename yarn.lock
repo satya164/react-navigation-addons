@@ -2704,6 +2704,13 @@ raw-body@~2.1.2:
     iconv-lite "0.4.13"
     unpipe "1.0.0"
 
+react-addons-shallow-compare@^15.5.2:
+  version "15.5.2"
+  resolved "https://registry.yarnpkg.com/react-addons-shallow-compare/-/react-addons-shallow-compare-15.5.2.tgz#7cb0ee7acc8d7c93fcc202df0bf47ba916a7bdad"
+  dependencies:
+    fbjs "^0.8.4"
+    object-assign "^4.1.0"
+
 react-clone-referenced-element@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/react-clone-referenced-element/-/react-clone-referenced-element-1.0.1.tgz#2bba8c69404c5e4a944398600bcc4c941f860682"
