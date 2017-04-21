@@ -7,7 +7,7 @@ Useful addons for React Navigation.
 
 ## Usage
 
-You'd need to wrap the navigators with our `enhance` function. For example, to wrap `Stacknavigator`:
+You'd need to wrap the navigators with our `enhance` function. For example, to wrap `StackNavigator`:
 
 ```js
 import { StackNavigator } from 'react-navigation';
@@ -30,10 +30,10 @@ Navigation options are usually tightly coupled to your component. This method al
 ```js
 class HomeScreen extends Component {
   componentWillMount() {
-    this.props.navigation.setOptions('header', {
-      title: this.props.navigation.state.params.user,
-      tintColor: this.props.theme.tintColor,
-      left: (
+    this.props.navigation.setOptions({
+      headerTitle: this.props.navigation.state.params.user,
+      headerTintColor: this.props.theme.tintColor,
+      headerLeft: (
         <TouchableOpacity onPress={this._handleSave}>
           <Text>Save</Text>
         </TouchableOpacity>
@@ -42,9 +42,9 @@ class HomeScreen extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.props.navigation.setOptions('header', {
-      title: nextProps.navigation.state.params.user,
-      tintColor: nextProps.theme.tintColor,
+    this.props.navigation.setOptions({
+      headerTitle: nextProps.navigation.state.params.user,
+      headerTintColor: nextProps.theme.tintColor,
     });
   }
 
@@ -58,7 +58,7 @@ class HomeScreen extends Component {
 }
 ```
 
-Calling `setOptions` with an plain object does a merge with previous options. For example, the options for `header` get merged with previous options for `header`. So you don't have to pass the full header object again.
+Calling `setOptions` with an plain object does a merge with previous options. You don't have to pass the full configuration object again.
 
 ### `navigation.addListener`
 

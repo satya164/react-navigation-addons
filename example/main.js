@@ -1,10 +1,10 @@
 /* @flow */
 
-import Exponent from 'exponent';
-import React, { PureComponent } from 'react';
-import { Text, View } from 'react-native';
-import { StackNavigator } from 'react-navigation';
-import { enhance } from 'react-navigation-addons';
+import Expo from 'expo';
+import React, {PureComponent} from 'react';
+import {Text, View} from 'react-native';
+import {StackNavigator} from 'react-navigation';
+import {enhance} from 'react-navigation-addons';
 
 class HomeScreen extends PureComponent {
   state = {
@@ -12,16 +12,16 @@ class HomeScreen extends PureComponent {
   };
 
   componentWillMount() {
-    this.props.navigation.setOptions('header', {
-      title: 'Hello world',
+    this.props.navigation.setOptions({
+      headerTitle: 'Hello world',
     });
   }
 
   componentDidMount() {
     let i = 0;
     setInterval(() => {
-      this.props.navigation.setOptions('header', {
-        title: `Hello world ${i}`,
+      this.props.navigation.setOptions({
+        headerTitle: `Hello world ${i}`,
       });
       i++;
     }, 1000);
@@ -37,13 +37,7 @@ class HomeScreen extends PureComponent {
 }
 
 const Stacks = enhance(StackNavigator)({
-  Home: { screen: HomeScreen },
+  Home: {screen: HomeScreen},
 });
 
-export default class StackNavigatorExample extends PureComponent {
-  render() {
-    return <Stacks />;
-  }
-}
-
-Exponent.registerRootComponent(StackNavigatorExample);
+Expo.registerRootComponent(Stacks);

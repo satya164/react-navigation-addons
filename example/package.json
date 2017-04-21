@@ -4,13 +4,13 @@
   "private": true,
   "main": "main.js",
   "dependencies": {
-    "exponent": "~13.1.1-rc.1",
-    "react": "~15.4.2",
-    "react-native": "git+https://github.com/exponentjs/react-native.git#sdk-13.0.0",
-    "react-navigation": "^1.0.0-beta.5",
+    "expo": "~16.0.0",
+    "react": "16.0.0-alpha.6",
+    "react-native": "git+https://github.com/expo/react-native.git#sdk-16.0.0",
+    "react-navigation": "^1.0.0-beta.8",
     "react-navigation-addons": "file:../"
   },
   "devDependencies": {
-    "babel-preset-exponent": "^1.0.0"
+    "babel-preset-expo": "^1.0.0"
   }
 }

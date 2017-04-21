@@ -1,17 +1,15 @@
 /* @flow */
 
 import React, { PureComponent, PropTypes } from 'react';
-import type {
-  NavigationState,
-} from 'react-navigation/src/TypeDefinition';
+import type { NavigationState } from 'react-navigation/src/TypeDefinition';
 
-type NavigationStateListener = NavigationState => void
+type NavigationStateListener = NavigationState => void;
 
-export default function enhanceNavigator<T: *>(Navigator: ReactClass<T>): ReactClass<T> {
+export default function enhanceNavigator<T: *>(
+  Navigator: ReactClass<T>,
+): ReactClass<T> {
   return class extends PureComponent<void, T, void> {
-
     static router = Navigator.router;
-
     static displayName = `enhancedNavigator(${Navigator.displayName || Navigator.name})`;
 
     static childContextTypes = {
@@ -23,9 +21,24 @@ export default function enhanceNavigator<T: *>(Navigator: ReactClass<T>): ReactC
     getChildContext() {
       return {
         getParentNavigation: this._getParentNavigation,
-        addNavigationStateChangeListener: this._addNavigationStateChangeListener,
-        removeNavigationStateChangeListener: this._removeNavigationStateChangeListener,
+        addNavigationStateChangeListener: this
+          ._addNavigationStateChangeListener,
+        removeNavigationStateChangeListener: this
+          ._removeNavigationStateChangeListener,
       };
+    }
+
+    componentDidUpdate(prevProps: T) {
+      if (
+        prevProps.navigation &&
+        this.props.navigation &&
+        prevProps.navigation.state !== this.props.navigation.state
+      ) {
+        this._handleNavigationStateChange(
+          prevProps.navigation.state,
+          this.props.navigation.state,
+        );
+      }
     }
 
     _listeners: Array<NavigationStateListener> = [];
@@ -52,7 +65,11 @@ export default function enhanceNavigator<T: *>(Navigator: ReactClass<T>): ReactC
       return (
         <Navigator
           {...this.props}
-          onNavigationStateChange={this._handleNavigationStateChange}
+          onNavigationStateChange={
+            this.props.navigation && this.props.navigation.state
+              ? undefined
+              : this._handleNavigationStateChange
+          }
         />
       );
     }

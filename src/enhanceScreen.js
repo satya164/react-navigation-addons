@@ -1,26 +1,34 @@
 /* @flow */
 
 import React, { Component, PropTypes } from 'react';
-import ReactComponentWithPureRenderMixin from 'react/lib/ReactComponentWithPureRenderMixin';
+import hoist from 'hoist-non-react-statics';
+import shallowEqual from 'shallowequal';
+import isPlainObject from 'lodash/isPlainObject';
+
 import type {
   NavigationState,
   NavigationAction,
   NavigationScreenProp,
 } from 'react-navigation/src/TypeDefinition';
 
-type ListenerName = 'focus' | 'blur' | 'change'
-type Listener = () => void
+type ListenerName = 'focus' | 'blur' | 'change';
+type Listener = () => void;
 
 type Context = {
-  getParentNavigation: () => NavigationScreenProp<NavigationState, NavigationAction>;
-  addNavigationStateChangeListener: (NavigationState => void) => void;
-  removeNavigationStateChangeListener: (NavigationState => void) => void;
-}
+  getParentNavigation: () => NavigationScreenProp<
+    NavigationState,
+    NavigationAction
+  >,
+  addNavigationStateChangeListener: ((NavigationState) => void) => void,
+  removeNavigationStateChangeListener: ((NavigationState) => void) => void,
+};
 
 const COUNT_PARAM = '__react_navigation_addons_update_count';
 
-export default function enhanceScreen<T: *>(ScreenComponent: ReactClass<T>): ReactClass<T> {
-  return class EnhancedScreen extends Component<void, T, void> {
+export default function enhanceScreen<T: *>(
+  ScreenComponent: ReactClass<T>,
+): ReactClass<T> {
+  class EnhancedScreen extends Component<void, T, void> {
     static displayName = `enhancedScreen(${ScreenComponent.displayName || ScreenComponent.name})`;
 
     static navigationOptions = ScreenComponent.navigationOptions;
@@ -46,7 +54,9 @@ export default function enhanceScreen<T: *>(ScreenComponent: ReactClass<T>): Rea
     }
 
     componentDidMount() {
-      this.context.addNavigationStateChangeListener(this._handleNavigationStateChange);
+      this.context.addNavigationStateChangeListener(
+        this._handleNavigationStateChange,
+      );
     }
 
     shouldComponentUpdate(nextProps) {
@@ -55,20 +65,24 @@ export default function enhanceScreen<T: *>(ScreenComponent: ReactClass<T>): Rea
 
       // This is a result of a previous `setOptions` call, prevent extra render
       if (state.params) {
-        if (nextState.params && nextState.params[COUNT_PARAM] === state.params[COUNT_PARAM] + 1) {
+        if (
+          nextState.params &&
+          nextState.params[COUNT_PARAM] === state.params[COUNT_PARAM] + 1
+        ) {
           return false;
         }
       }
 
-      return ReactComponentWithPureRenderMixin.shouldComponentUpdate.call(
-        this,
-        nextProps,
-        nextState,
+      return (
+        !shallowEqual(this.props, nextProps) ||
+        !shallowEqual(this.state, nextState)
       );
     }
 
     componentWillUnmount() {
-      this.context.removeNavigationStateChangeListener(this._handleNavigationStateChange);
+      this.context.removeNavigationStateChangeListener(
+        this._handleNavigationStateChange,
+      );
     }
 
     context: Context;
@@ -78,17 +92,13 @@ export default function enhanceScreen<T: *>(ScreenComponent: ReactClass<T>): Rea
     _listeners: { [key: ListenerName]: Array<Listener> } = {};
     _focused: boolean = false;
 
-    _isPlainObject = o => {
-      return typeof o === 'object' && (o.constructor === Object || typeof o.constructor === 'undefined');
-    };
+    _setOptions = options => {
+      let nextOptions;
 
-    _setOptions = (name, options) => {
-      const nextOptions = { ...this._previousOptions };
-
-      if (this._isPlainObject(options) && this._isPlainObject(this._previousOptions[name])) {
-        nextOptions[name] = { ...this._previousOptions[name], ...options };
+      if (isPlainObject(this._previousOptions) && isPlainObject(options)) {
+        nextOptions = { ...this._previousOptions, ...options };
       } else {
-        nextOptions[name] = options;
+        nextOptions = options;
       }
 
       EnhancedScreen.navigationOptions = nextOptions;
@@ -112,7 +122,9 @@ export default function enhanceScreen<T: *>(ScreenComponent: ReactClass<T>): Rea
         return;
       }
 
-      this._listeners[name] = this._listeners[name].filter(cb => cb !== callback);
+      this._listeners[name] = this._listeners[name].filter(
+        cb => cb !== callback,
+      );
     };
 
     _handleNavigationStateChange = state => {
@@ -144,5 +156,9 @@ export default function enhanceScreen<T: *>(ScreenComponent: ReactClass<T>): Rea
     render() {
       return <ScreenComponent {...this.props} navigation={this._navigation} />;
     }
-  };
+  }
+
+  hoist(ScreenComponent, EnhancedScreen);
+
+  return EnhancedScreen;
 }
