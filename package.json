@@ -26,8 +26,8 @@
     "react-navigation": "^1.0.0-beta.8"
   },
   "dependencies": {
+    "eslint-import-resolver-babel-module": "^3.0.0",
     "hoist-non-react-statics": "^1.2.0",
-    "lodash": "^4.17.4",
     "shallowequal": "^0.2.2"
   }
 }

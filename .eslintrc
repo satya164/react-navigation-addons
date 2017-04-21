@@ -18,6 +18,12 @@
     "prettier"
   ],
 
+  "settings": {
+    "import/resolver": {
+      "babel-module": {}
+    }
+  },
+
   "plugins": [
     "babel",
     "flowtype",

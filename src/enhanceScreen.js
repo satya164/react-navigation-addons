@@ -3,7 +3,6 @@
 import React, { Component, PropTypes } from 'react';
 import hoist from 'hoist-non-react-statics';
 import shallowEqual from 'shallowequal';
-import isPlainObject from 'lodash/isPlainObject';
 
 import type {
   NavigationState,
@@ -95,7 +94,10 @@ export default function enhanceScreen<T: *>(
     _setOptions = options => {
       let nextOptions;
 
-      if (isPlainObject(this._previousOptions) && isPlainObject(options)) {
+      if (
+        typeof this._previousOptions === 'object' &&
+        typeof options === 'object'
+      ) {
         nextOptions = { ...this._previousOptions, ...options };
       } else {
         nextOptions = options;
