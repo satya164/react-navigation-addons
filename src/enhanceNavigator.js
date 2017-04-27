@@ -34,10 +34,7 @@ export default function enhanceNavigator<T: *>(
         this.props.navigation &&
         prevProps.navigation.state !== this.props.navigation.state
       ) {
-        this._handleNavigationStateChange(
-          prevProps.navigation.state,
-          this.props.navigation.state,
-        );
+        this._fireStateListeners(this.props.navigation.state);
       }
     }
 
@@ -53,13 +50,15 @@ export default function enhanceNavigator<T: *>(
       this._listeners = this._listeners.filter(c => c !== cb);
     };
 
-    _handleNavigationStateChange = (prevState, currState) => {
-      this._listeners.forEach(cb => cb(currState));
+    _handleNavigationStateChange = (prevState, currState, action) => {
+      this._fireStateListeners(currState);
 
       if (typeof this.props.onNavigationStateChange !== 'undefined') {
-        this.props.onNavigationStateChange(prevState, currState);
+        this.props.onNavigationStateChange(prevState, currState, action);
       }
     };
+
+    _fireStateListeners = state => this._listeners.forEach(cb => cb(state));
 
     render() {
       return (
