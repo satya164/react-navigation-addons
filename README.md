@@ -1,6 +1,8 @@
 React Navigation Add-ons
 ========================
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/satya164/react-navigation-addons.svg)](https://greenkeeper.io/)
+
 **NOTE: This is an experiment. If you want to use this in your app, please copy the files instead of using the repo directly. The API can change anytime or the repo might be deleted.**
 
 Useful addons for React Navigation.
