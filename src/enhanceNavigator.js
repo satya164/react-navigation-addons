@@ -61,14 +61,17 @@ export default function enhanceNavigator<T: *>(
     _fireStateListeners = state => this._listeners.forEach(cb => cb(state));
 
     render() {
+      let topLevelNavProps;
+      // We can only set onNavigationStateChange on top level navigators
+      // with react-navigation v1.0.0-beta.9 otherwise we get an exception
+      if (!this.props.navigation || !this.props.navigation.state) {
+        topLevelNavProps = { onNavigationStateChange: this._handleNavigationStateChange}
+      }
+
       return (
         <Navigator
           {...this.props}
-          onNavigationStateChange={
-            this.props.navigation && this.props.navigation.state
-              ? undefined
-              : this._handleNavigationStateChange
-          }
+          {...topLevelNavProps}
         />
       );
     }
