@@ -61,16 +61,13 @@ export default function enhanceNavigator<T: *>(
     _fireStateListeners = state => this._listeners.forEach(cb => cb(state));
 
     render() {
-      return (
-        <Navigator
-          {...this.props}
-          onNavigationStateChange={
-            this.props.navigation && this.props.navigation.state
-              ? undefined
-              : this._handleNavigationStateChange
-          }
-        />
-      );
+      let props = this.props;
+
+      if (!this.props.navigation || !this.props.navigation.state) {
+        props = { ...props, onNavigationStateChange: this._handleNavigationStateChange };
+      }
+
+      return <Navigator {...props} />;
     }
   };
 }
