@@ -139,3 +139,23 @@ class SettingsScreen extends Component {
 ```
 
 If there's no parent navigator, this method will return `undefined`.
+
+### `navigation.goBack`
+Rewrite goBack to support routeName and step。
+
+**Example:**
+```js
+class SettingsScreen extends Component {
+
+  onBack = () => {
+    const { goBack } = this.props.navigation
+    goBack() // Return to the prev page
+    goBack(2) // Return to the prev prev page
+    goBack('Login') // Return to the routeName is Login's page，If history does not have a Login, it is reset to Login
+  };
+  
+  render() {
+    ...
+  }
+}
+```
