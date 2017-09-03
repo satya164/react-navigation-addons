@@ -3,7 +3,7 @@
 import React, { Component, PropTypes } from 'react';
 import hoist from 'hoist-non-react-statics';
 import shallowEqual from 'shallowequal';
-
+import { NavigationActions } from 'react-navigation';
 import type {
   NavigationState,
   NavigationAction,
@@ -23,6 +23,8 @@ type Context = {
 };
 
 const COUNT_PARAM = '__react_navigation_addons_update_count';
+
+const screens = [];
 
 export default function enhanceScreen<T: *>(
   ScreenComponent: ReactClass<T>,
@@ -145,6 +147,32 @@ export default function enhanceScreen<T: *>(
       }
     };
 
+    /**
+     * Rewrite the goback
+     * @param params {String|Number} routeName or steps
+     * @private
+     */
+    _goBack = params => {
+      const maxIndex = screens.length - 1;
+      if (typeof params === 'string') {
+        const index = screens.findIndex((item) => item.state.routeName === params);
+        if (~index) {
+          for (let i = max; i > index; i--) {
+            screens[i].goBack();
+          }
+        } else {
+          this.props.navigation.dispatch(NavigationActions.reset({ index: 0, actions: [{ routeName: params,}] }));
+        }
+      } else if (typeof params === 'number') {
+        const index = Math.max(0, maxIndex - params);
+        for (let i = max; i > index; i--) {
+          screens[i].goBack();
+        }
+      } else {
+        this.props.navigation.goBack(params);
+      }
+    };
+
     get _navigation() {
       return {
         ...this.props.navigation,
@@ -152,6 +180,7 @@ export default function enhanceScreen<T: *>(
         getParent: this._getParent,
         addListener: this._addListener,
         removeListener: this._removeListener,
+        goBack: this._goBack,
       };
     }
 
