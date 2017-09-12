@@ -162,3 +162,21 @@ class SettingsScreen extends Component {
   }
 }
 ```
+
+### `navigation.forceUpdate`
+Force all scene update because of a change in language or theme.
+
+**Example:**
+```js
+class SettingsScreen extends Component {
+
+  changeTheme = () => {
+    ...
+    this.props.navigation.forceUpdate()
+  };
+  
+  render() {
+    ...
+  }
+}
+```

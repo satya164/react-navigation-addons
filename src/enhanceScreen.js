@@ -1,5 +1,6 @@
 /* @flow */
 
+import EventEmitter from 'events'
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import hoist from 'hoist-non-react-statics';
@@ -19,7 +20,7 @@ type Context = {
   getParentNavigation: () => NavigationScreenProp<
     NavigationState,
     NavigationAction
-  >,
+    >,
   addNavigationStateChangeListener: ((NavigationState) => void) => void,
   removeNavigationStateChangeListener: ((NavigationState) => void) => void,
 };
@@ -27,6 +28,8 @@ type Context = {
 const screens = [];
 
 const COUNT_PARAM = '__react_navigation_addons_update_count';
+
+const eventEmitter = new EventEmitter();
 
 export default function enhanceScreen<T: *>(
   ScreenComponent: ReactClass<T>,
@@ -55,6 +58,7 @@ export default function enhanceScreen<T: *>(
     componentWillMount() {
       this.props.navigation.setParams({ [COUNT_PARAM]: this._updateCount });
       screens.push(this.props.navigation)
+      eventEmitter.on('forceUpdate', this._forceUpdate)
     }
 
     componentDidMount() {
@@ -88,6 +92,7 @@ export default function enhanceScreen<T: *>(
         this._handleNavigationStateChange,
       );
       screens.splice(screens.findIndex((item) => item.state.key === this.props.navigation.state.key), 1);
+      eventEmitter.removeListener('forceUpdate', this._forceUpdate)
     }
 
     context: Context;
@@ -151,7 +156,6 @@ export default function enhanceScreen<T: *>(
       }
     };
 
-
     /**
      * Rewrite the goback
      * @param params {String|Number} routeName or steps
@@ -178,6 +182,10 @@ export default function enhanceScreen<T: *>(
       }
     };
 
+    _forceUpdate = () => {
+      this.forceUpdate()
+    };
+
     get _navigation() {
       return {
         ...this.props.navigation,
@@ -186,6 +194,7 @@ export default function enhanceScreen<T: *>(
         addListener: this._addListener,
         removeListener: this._removeListener,
         goBack: this._goBack,
+        forceUpdate: ()=> eventEmitter.emit('forceUpdate')
       };
     }
 
