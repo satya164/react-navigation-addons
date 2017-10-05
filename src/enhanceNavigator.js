@@ -1,6 +1,7 @@
 /* @flow */
 
-import React, { PureComponent, PropTypes } from 'react';
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import type { NavigationState } from 'react-navigation/src/TypeDefinition';
 
 type NavigationStateListener = NavigationState => void;
