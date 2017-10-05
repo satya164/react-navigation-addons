@@ -28,6 +28,7 @@
   "dependencies": {
     "eslint-import-resolver-babel-module": "^3.0.0",
     "hoist-non-react-statics": "^1.2.0",
+    "prop-types": "15.6.0",
     "shallowequal": "^0.2.2"
   }
 }
