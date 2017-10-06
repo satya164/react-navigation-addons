@@ -12,9 +12,17 @@ export default function(Navigator: *) {
     const nextScreens = {};
 
     for (const screen in screens) {
+      let enhancedScreen;
+
+      if(typeof screens[screen].screen.router !== 'undefined') {
+        enhancedScreen = enhanceNavigator(screens[screen].screen);
+      } else {
+        enhancedScreen = enhanceScreen(screens[screen].screen);
+      }
+
       nextScreens[screen] = {
         ...screens[screen],
-        screen: enhanceScreen(screens[screen].screen),
+        screen: enhancedScreen,
       };
     }
 
