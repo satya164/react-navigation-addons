@@ -1,9 +1,11 @@
 /* @flow */
 
+import EventEmitter from 'events'
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import hoist from 'hoist-non-react-statics';
 import shallowEqual from 'shallowequal';
+import { NavigationActions } from 'react-navigation';
 
 import type {
   NavigationState,
@@ -18,12 +20,16 @@ type Context = {
   getParentNavigation: () => NavigationScreenProp<
     NavigationState,
     NavigationAction
-  >,
+    >,
   addNavigationStateChangeListener: ((NavigationState) => void) => void,
   removeNavigationStateChangeListener: ((NavigationState) => void) => void,
 };
 
+const screens = [];
+
 const COUNT_PARAM = '__react_navigation_addons_update_count';
+
+const eventEmitter = new EventEmitter();
 
 export default function enhanceScreen<T: *>(
   ScreenComponent: ReactClass<T>,
@@ -51,6 +57,8 @@ export default function enhanceScreen<T: *>(
 
     componentWillMount() {
       this.props.navigation.setParams({ [COUNT_PARAM]: this._updateCount });
+      screens.push(this.props.navigation)
+      eventEmitter.on('forceUpdate', this._forceUpdate)
     }
 
     componentDidMount() {
@@ -83,6 +91,8 @@ export default function enhanceScreen<T: *>(
       this.context.removeNavigationStateChangeListener(
         this._handleNavigationStateChange,
       );
+      screens.splice(screens.findIndex((item) => item.state.key === this.props.navigation.state.key), 1);
+      eventEmitter.removeListener('forceUpdate', this._forceUpdate)
     }
 
     context: Context;
@@ -146,6 +156,36 @@ export default function enhanceScreen<T: *>(
       }
     };
 
+    /**
+     * Rewrite the goback
+     * @param params {String|Number} routeName or steps
+     * @private
+     */
+    _goBack = params => {
+      const max = screens.length - 1;
+      if (typeof params === 'string') {
+        const index = screens.findIndex((item) => item.state.routeName === params);
+        if (~index) {
+          for (let i = max; i > index; i--) {
+            screens[i].goBack();
+          }
+        } else {
+          this.props.navigation.dispatch(NavigationActions.reset({ index: 0, actions: [{ routeName: params,}] }));
+        }
+      } else if (typeof params === 'number') {
+        const index = Math.max(0, max - params);
+        for (let i = max; i > index; i--) {
+          screens[i].goBack();
+        }
+      } else {
+        this.props.navigation.goBack(params);
+      }
+    };
+
+    _forceUpdate = () => {
+      this.forceUpdate()
+    };
+
     get _navigation() {
       return {
         ...this.props.navigation,
@@ -153,6 +193,8 @@ export default function enhanceScreen<T: *>(
         getParent: this._getParent,
         addListener: this._addListener,
         removeListener: this._removeListener,
+        goBack: this._goBack,
+        forceUpdate: ()=> eventEmitter.emit('forceUpdate')
       };
     }
 
