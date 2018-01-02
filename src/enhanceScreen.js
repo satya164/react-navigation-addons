@@ -132,22 +132,22 @@ export default function enhanceScreen<T: *>(
     };
 
     _handleNavigationStateChange = state => {
-      const focused = state.routes[state.index] === this.props.navigation.state;
+      const isFocused = state.routes[state.index].key === this.props.navigation.state.key;
 
       if (this._listeners.change) {
         this._listeners.change.forEach(cb => cb(state));
       }
 
-      if (this._listeners.focus && focused) {
+      if (this._listeners.focus && isFocused) {
         this._listeners.focus.forEach(cb => cb());
       }
 
-      if (this._listeners.blur && !focused) {
+      if (this._listeners.blur && !isFocused) {
         this._listeners.blur.forEach(cb => cb());
       }
     };
 
-    get _navigation() {
+    _getNavigation() {
       return {
         ...this.props.navigation,
         setOptions: this._setOptions,
@@ -158,7 +158,7 @@ export default function enhanceScreen<T: *>(
     }
 
     render() {
-      return <ScreenComponent {...this.props} navigation={this._navigation} />;
+      return <ScreenComponent {...this.props} navigation={this._getNavigation()} />;
     }
   }
 
