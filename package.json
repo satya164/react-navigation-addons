@@ -10,25 +10,20 @@
     "lint": "eslint ."
   },
   "devDependencies": {
-    "babel-eslint": "^7.2.2",
-    "eslint": "^3.19.0",
-    "eslint-config-prettier": "^1.7.0",
-    "eslint-plugin-babel": "^4.1.1",
-    "eslint-plugin-flowtype": "^2.32.1",
-    "eslint-plugin-import": "^2.2.0",
-    "eslint-plugin-prettier": "^2.0.1",
-    "eslint-plugin-react": "^6.10.3",
-    "eslint-plugin-react-native": "^2.3.2",
-    "flow-bin": "^0.40.0",
-    "prettier": "^1.2.2",
-    "react": "^15.5.4",
-    "react-native": "^0.43.4",
-    "react-navigation": "^1.0.0-beta.8"
+    "babel-eslint": "^8.1.2",
+    "eslint": "^4.14.0",
+    "eslint-config-satya164": "^1.0.1",
+    "eslint-plugin-react-native": "^3.2.0",
+    "eslint-plugin-react-native-globals": "^0.1.1",
+    "flow-bin": "~0.62.0",
+    "prettier": "^1.9.2",
+    "react": "16.0.0",
+    "react-native": "~0.50.0",
+    "react-navigation": "^1.0.0-beta.22"
   },
   "dependencies": {
-    "eslint-import-resolver-babel-module": "^3.0.0",
-    "hoist-non-react-statics": "^1.2.0",
+    "hoist-non-react-statics": "^2.3.1",
     "prop-types": "15.6.0",
-    "shallowequal": "^0.2.2"
+    "shallowequal": "^1.0.2"
   }
 }

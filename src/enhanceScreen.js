@@ -17,7 +17,7 @@ type Listener = () => void;
 type Context = {
   getParentNavigation: () => NavigationScreenProp<
     NavigationState,
-    NavigationAction
+    NavigationAction,
   >,
   addNavigationStateChangeListener: ((NavigationState) => void) => void,
   removeNavigationStateChangeListener: ((NavigationState) => void) => void,
@@ -29,7 +29,8 @@ export default function enhanceScreen<T: *>(
   ScreenComponent: ReactClass<T>,
 ): ReactClass<T> {
   class EnhancedScreen extends Component<void, T, void> {
-    static displayName = `enhancedScreen(${ScreenComponent.displayName || ScreenComponent.name})`;
+    static displayName = `enhancedScreen(${ScreenComponent.displayName ||
+      ScreenComponent.name})`;
 
     static navigationOptions = ScreenComponent.navigationOptions;
 

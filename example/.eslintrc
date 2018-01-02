@@ -1,0 +1,10 @@
+
+{
+  "settings": {
+    "import/core-modules": [ "react-native-paper",  "react-native-paper/types" ]
+  },
+
+  "rules": {
+    "react/prop-types": "off",
+  }
+}

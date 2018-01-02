@@ -8,8 +8,8 @@ module.exports = {
   },
   getProvidesModuleNodeModules() {
     return [
-      '@expo/vector-icons',
       'hoist-non-react-statics',
+      'prop-types',
       'react-native',
       'react-navigation',
       'react',

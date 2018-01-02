@@ -2,6 +2,7 @@
 
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import hoist from 'hoist-non-react-statics';
 import type { NavigationState } from 'react-navigation/src/TypeDefinition';
 
 type NavigationStateListener = NavigationState => void;
@@ -9,9 +10,9 @@ type NavigationStateListener = NavigationState => void;
 export default function enhanceNavigator<T: *>(
   Navigator: ReactClass<T>,
 ): ReactClass<T> {
-  return class extends PureComponent<void, T, void> {
-    static router = Navigator.router;
-    static displayName = `enhancedNavigator(${Navigator.displayName || Navigator.name})`;
+  class EnhancedNavigator extends PureComponent<void, T, void> {
+    static displayName = `enhancedNavigator(${Navigator.displayName ||
+      Navigator.name})`;
 
     static childContextTypes = {
       getParentNavigation: PropTypes.func,
@@ -65,10 +66,17 @@ export default function enhanceNavigator<T: *>(
       let props = this.props;
 
       if (!this.props.navigation || !this.props.navigation.state) {
-        props = { ...props, onNavigationStateChange: this._handleNavigationStateChange };
+        props = {
+          ...props,
+          onNavigationStateChange: this._handleNavigationStateChange,
+        };
       }
 
       return <Navigator {...props} />;
     }
-  };
+  }
+
+  hoist(Navigator, EnhancedNavigator);
+
+  return EnhancedNavigator;
 }

@@ -1,10 +1,9 @@
 {
   "name": "React Native Add-ons Demo",
-  "description": "Demonstrates the various capabilities of react-navigation-addons: https://github.com/react-native-community/react-navigation-addons",
+  "description": "Demonstrates the various capabilities of react-navigation-addons: https://github.com/satya164/react-navigation-addons",
   "slug": "react-navigation-addons-demo",
-  "sdkVersion": "16.0.0",
+  "sdkVersion": "24.0.0",
   "version": "1.0.0",
-  "orientation": "portrait",
   "loading": {
     "hideExponentText": false
   },

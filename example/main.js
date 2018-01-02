@@ -1,10 +1,10 @@
 /* @flow */
 
 import Expo from 'expo';
-import React, {PureComponent} from 'react';
-import {Text, View} from 'react-native';
-import {StackNavigator} from 'react-navigation';
-import {enhance} from 'react-navigation-addons';
+import React, { PureComponent } from 'react';
+import { Text, View } from 'react-native';
+import { StackNavigator } from 'react-navigation';
+import { enhance } from 'react-navigation-addons';
 
 class HomeScreen extends PureComponent {
   state = {
@@ -37,7 +37,7 @@ class HomeScreen extends PureComponent {
 }
 
 const Stacks = enhance(StackNavigator)({
-  Home: {screen: HomeScreen},
+  Home: { screen: HomeScreen },
 });
 
 Expo.registerRootComponent(Stacks);
