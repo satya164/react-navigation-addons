@@ -1,7 +1,7 @@
 
 {
   "settings": {
-    "import/core-modules": [ "react-native-paper",  "react-native-paper/types" ]
+    "import/core-modules": [ "react-navigation-addons" ]
   },
 
   "rules": {
