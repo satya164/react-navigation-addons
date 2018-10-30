@@ -1,7 +1,7 @@
 React Navigation Add-ons
 ========================
 
-**NOTE: This is an experiment. If you want to use this in your app, please copy the files instead of using the repo directly. The API can change anytime or the repo might be deleted.**
+**NOTE: Features such as navigation events are already available in React Navigation and this library is no longer maintained. Please don't use it in your app.**
 
 Useful addons for React Navigation.
 
